@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portafolio Académico Profesional</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="logo-container">
+      <img class="logo" src="assets/logo-universidad.png" alt="Logo de la universidad" />
+      <div class="titles">
+        <h1 id="titulo-universidad">Portafolio Académico</h1>
+        <p id="subtitulo-universidad">Universidad</p>
+      </div>
+    </div>
+    <div class="user-box">
+      <button class="login-btn-corner" id="btn-sesion" type="button">👤 Iniciar Sesión</button>
+      <img class="avatar" src="assets/foto-estudiante.png" alt="Foto del estudiante" />
+      <div class="name">
+        <strong id="nombre-estudiante">Nayeli Quispe Tica</strong>
+        <span id="codigo-estudiante">U00057H</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <img class="hero-avatar" src="assets/foto-estudiante.png" alt="Foto del estudiante" />
+       <p class="hero-sub">Nayeli Quispe Tica</p>
+      <h2 class="hero-title">Bienvenido a mi Portafolio</h2>
+      <div class="hero-card">
+        <div class="hero-card-item">
+          <span class="hero-label">"Algoritmos y Estructuras de Datos"</span>
+          <span class="hero-value"> / "Desarrollo de Aplicaciones"</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="centro">
+    <div class="stats">
+      <div class="stat"><span class="stat-ico">📚</span><b id="st-cursos">2</b><small>Cursos</small></div>
+      <div class="stat"><span class="stat-ico">🗓️</span><b>32</b><small>Semanas de estudio</small></div>
+      <div class="stat"><span class="stat-ico">✅</span><b id="st-entregas">0</b><small>Tareas publicadas</small></div>
+      <div class="stat"><span class="stat-ico">🎓</span><b>UPLA</b><small>Ingeniería de Sistemas</small></div>
+    </div>
+    <div class="sobre">
+      <h3>✨ Sobre mi portafolio</h3>
+      <p>Aquí reúno mis trabajos semana por semana: código, informes y proyectos de mis cursos.</p>
+      <div class="chips"><span>☕ Java</span><span>🧩 POO</span><span>🗄️ Base de datos</span><span>🌐 HTML · CSS · JS</span><span>🐙 GitHub</span><span>🛠️ NetBeans</span></div>
+    </div>
+  </section>
+
+  <!-- Vista Principal: Tarjetas de Cursos -->
+  <main class="main-container" id="vista-home">
+    <div class="section-header-title">
+      <h3>Mis Cursos</h3>
+      <p id="estado-publicacion">Aquí puedes ver todas las tareas publicadas, semana por semana.</p>
+    </div>
+    <div class="courses-grid" id="courses-grid"></div>
+  </main>
+
+  <!-- Vista Detalle del Curso -->
+  <main class="main-container" id="vista-curso" style="display: none;">
+    <div class="curso-header-bar">
+      <button class="back-btn" id="btn-volver">← Volver a Cursos</button>
+      <h2 id="curso-titulo-detalle">Nombre del Curso</h2>
+    </div>
+    <div id="course-bodies"></div>
+  </main>
+
+  <footer class="note">
+    <div class="footer-card">
+      💡 <strong>Consejo:</strong> "Desarrollar sistemas no es solo hacer que el código funcione, es diseñar soluciones robustas, escalables y elegantes que transformen ideas complejas en experiencias simples."
+    </div>
+  </footer>
+
+    <script src="script.js"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    $("subtitulo-universidad").textContent = CONFIG.universidad;
+    $("nombre-estudiante").textContent = CONFIG.nombreEstudiante;
+    $("codigo-estudiante").textContent = CONFIG.codigoEstudiante;
+    const CLAVE_SESION = "portafolio_sesion_admin";
+    let ADMIN = sessionStorage.getItem(CLAVE_SESION) === "activo";
+    function actualizarSesion() {
+      const b = $("btn-sesion");
+      b.textContent = ADMIN ? "🚪 Cerrar Sesión" : "👤 Iniciar Sesión";
+      b.classList.toggle("sesion-activa", ADMIN);
+    }
+    $("btn-sesion").addEventListener("click", () => {
+      if (ADMIN) { ADMIN = false; sessionStorage.removeItem(CLAVE_SESION); }
+      else {
+        const clave = prompt("Ingresa la clave de administrador:");
+        if (clave === null) return;
+        if (clave !== CONFIG.claveAdministrador) { alert("La clave es incorrecta."); return; }
+        ADMIN = true; sessionStorage.setItem(CLAVE_SESION, "activo");
+        alert("Sesión de administrador iniciada. Ahora verás el botón ➕ Subir tarea en cada semana.");
+      }
+      actualizarSesion();
+      if ($("vista-curso").style.display === "block") renderCuerpo(cursoActual); else renderHome();
+    });
+    let cursoActual = null;
+    let datos = crearDatosIniciales();
+
+    const icono = (t) => t === "enlace" ? "🔗" : t.includes("image") ? "🖼️" : t.includes("pdf") ? "📄" : (t.includes("zip") || t.includes("rar")) ? "📦" : "📁";
+
+    function renderHome() {
+      const grid = $("courses-grid"); grid.innerHTML = "";
+      CURSOS.forEach((curso) => {
+        let hechas = 0;
+        for (let i = 1; i <= curso.totalSemanas; i++) if (datos[curso.id].semanas[i].entregas.length) hechas++;
+        const pct = Math.round(hechas / curso.totalSemanas * 100);
+        const card = document.createElement("div");
+        card.className = "course-card-menu";
+        card.innerHTML = `<div class="course-meta-top"><span class="code">${curso.codigo}</span><span class="badge-count">${hechas}/${curso.totalSemanas} semanas</span></div>
+          <h3>${curso.nombre}</h3><p>${curso.unidades} Unidades Académicas (${curso.semanasPorUnidad} semanas por unidad)</p>
+          <div class="progress-line"><i style="width:${pct}%"></i></div><button class="btn-ingresar">Ingresar al Curso <span>→</span></button>`;
+        card.addEventListener("click", () => abrirCurso(curso.id));
+        grid.appendChild(card);
+      });
+      $("vista-home").style.display = "block"; $("vista-curso").style.display = "none";
+    }
+
+    function abrirCurso(id) {
+      cursoActual = id;
+      const curso = CURSOS.find(c => c.id === id);
+      $("curso-titulo-detalle").textContent = curso.nombre + " (" + curso.codigo + ")";
+      $("vista-home").style.display = "none"; $("vista-curso").style.display = "block";
+      renderCuerpo(id); window.scrollTo({ top: 250, behavior: "smooth" });
+    }
+    $("btn-volver").addEventListener("click", renderHome);
+
+    function renderCuerpo(id) {
+      const curso = CURSOS.find(c => c.id === id), cont = $("course-bodies"); cont.innerHTML = "";
+      for (let u = 1; u <= curso.unidades; u++) {
+        const sec = document.createElement("div"); sec.className = "unidad-section";
+        sec.innerHTML = `<h3 class="unidad-title">Unidad Didáctica ${u}</h3>`;
+        const grid = document.createElement("div"); grid.className = "week-grid";
+        for (let i = (u - 1) * curso.semanasPorUnidad + 1; i <= u * curso.semanasPorUnidad; i++) {
+          const sem = datos[id].semanas[i], hay = sem.entregas.length > 0;
+          const lista = hay ? sem.entregas.map(e => e.tipo === "enlace"
+            ? `<li><span class="entry-icon">🔗</span><a class="entry-link" href="${escaparHtml(e.valor)}" target="_blank" rel="noopener">${escaparHtml(e.valor)}</a></li>`
+            : `<li><span class="entry-icon">${icono(e.tipoMime)}</span><a class="entry-link" href="${e.url}" target="_blank" rel="noopener">${escaparHtml(e.nombre)} (${e.tamanio})</a>
+               <div class="entry-actions"><button type="button" class="action-btn" data-ver="${e.url}" data-n="${escaparHtml(e.nombre)}" data-m="${e.tipoMime}">👁️ Ver</button>
+               <button type="button" class="action-btn" data-desc="${e.url}" data-n="${escaparHtml(e.nombre)}">📥 Descargar</button></div></li>`).join("")
+            : `<li><span class="empty-note">Sin evidencias adjuntas todavía.</span></li>`;
+          const card = document.createElement("div");
+          card.className = "week-card" + (hay ? " done" : "");
+          card.innerHTML = `<div class="week-card-head"><span class="week-card-num">Semana ${i}</span><span class="status-pill">${hay ? "✓ Entregado" : "• Pendiente"}</span></div>
+            <div class="week-tema-wrapper"><p class="week-tema">${escaparHtml(sem.tema)}</p>${ADMIN ? `<button type="button" class="action-btn btn-tema">✏️ Editar tema</button>` : ""}</div>
+            <button class="toggle-btn">📄 Ver evidencias</button>
+            <div class="week-panel" hidden>${ADMIN ? `<a class="add-btn subir-github" href="${urlSubir(id, i)}" target="_blank" rel="noopener">➕ Subir archivos (PDF, ZIP, imágenes, carpetas)</a>
+              <div class="upload-row"><input type="url" placeholder="Pega aquí el enlace (https://...)" class="input-enlace" /><button type="button" class="add-btn btn-enlace" data-c="${id}" data-s="${i}">🔗 Añadir enlace</button></div>` : ""}<ul class="entries">${lista}</ul></div>`;
+          const panel = card.querySelector(".week-panel");
+          card.querySelector(".toggle-btn").addEventListener("click", () => { panel.hidden = !panel.hidden; });
+          const bt = card.querySelector(".btn-tema");
+          if (bt) bt.addEventListener("click", async () => {
+            const nuevo = prompt("Escribe el nuevo tema de la semana " + i + ":", sem.tema);
+            if (nuevo === null || !nuevo.trim()) return;
+            if (sem.temaPath) {
+              try { await navigator.clipboard.writeText(nuevo.trim()); } catch (e) {}
+              alert("Se abrirá GitHub. Borra el texto anterior, pega el nuevo tema (Ctrl+V) y pulsa Commit changes.\n\nNuevo tema: " + nuevo.trim());
+            } else alert("Se abrirá GitHub con el tema listo. Solo pulsa Commit new file.");
+            window.open(urlTema(id, i, sem, nuevo.trim()), "_blank", "noopener");
+          });
+          const be = card.querySelector(".btn-enlace");
+          if (be) be.addEventListener("click", () => {
+            const inp = card.querySelector(".input-enlace"), v = inp.value.trim();
+            if (!v) { alert("Escribe o pega un enlace primero."); inp.focus(); return; }
+            window.open(urlNuevoEnlace(be.dataset.c, be.dataset.s, v), "_blank", "noopener");
+          });
+          card.querySelectorAll("[data-ver]").forEach(b => b.addEventListener("click", () => abrirEvidencia(b.dataset.ver, b.dataset.n, b.dataset.m)));
+          card.querySelectorAll("[data-desc]").forEach(b => b.addEventListener("click", () => descargarEvidencia(b.dataset.desc, b.dataset.n)));
+          grid.appendChild(card);
+        }
+        sec.appendChild(grid); cont.appendChild(sec);
+      }
+    }
+
+    (async () => {
+      actualizarSesion();
+      await cargarEntregasPublicadas(datos);
+      let total = 0;
+      CURSOS.forEach(c => Object.values(datos[c.id].semanas).forEach(s => total += s.entregas.length));
+      $("st-entregas").textContent = total;
+      renderHome();
+    })();
+  </script>
+</body>
+</html>
