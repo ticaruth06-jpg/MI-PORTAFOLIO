@@ -29,10 +29,10 @@ const CURSOS = [
 
 // Temas oficiales extraídos del sílabo UPLA para Algoritmos y Estructuras de Datos
 const TEMAS_INICIALES_ALGORITMO = {
-  1: "Arreglos Bidimensionales, representación y aplicaciones",
-  2: "Arreglos paralelos, representación y uso de arreglos de objetos",
-  3: "Clase ArrayList y Vector (Operaciones básicas)",
-  4: "Clase Linked List y sus operaciones",
+  1: "Arreglos Unidimensionales",
+  2: "Arreglos Bidimensionales",
+  3: "Arreglos paralelos)",
+  4: "Arreglos de Objetos",
   5: "Pilas: TDA pila, definición, representación y operaciones",
   6: "Pilas de objetos y aplicaciones con pilas (Clase Stack)",
   7: "Colas: TDA cola, representación, operaciones y aplicaciones de colas",
@@ -49,10 +49,10 @@ const TEMAS_INICIALES_ALGORITMO = {
 
 // Temas oficiales del sílabo UPLA - Desarrollo de Aplicaciones I (Taller de Apps)
 const TEMAS_INICIALES_TALLER = {
-  1: "Inicialización del Proyecto y Ventanas Principales (JFrame)",
-  2: "Organización del Espacio con Contenedores (JPanel, JScrollPane)",
-  3: "Implementación de Menús de Navegación (JMenuBar, JMenu, JMenuItem)",
-  4: "Integración de Componentes Básicos y Validación Visual",
+  1: "Diseño, que es Maven y Pom.xml",
+  2: "Aplicacion en Maven, Web Application",
+  3: "Programación Orientada a Objetos en Web Application",
+  4: "Diseño de una pagina web en Maven",
   5: "Gestión de Archivos y Persistencia de Datos Locales (JFileChooser)",
   6: "Personalización Visual Avanzada e Identidad del Proyecto (Look and Feel)",
   7: "Diseño de Interfaces Complejas con Tablas y Listas (JTable, JList, JComboBox)",
