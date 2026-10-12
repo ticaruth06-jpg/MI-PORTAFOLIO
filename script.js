@@ -20,7 +20,7 @@ const CURSOS = [
   {
     id: "taller",
     codigo: "IS-102",
-    nombre: "Taller de Apps",
+    nombre: "Desarrollo de Aplicaciones",
     unidades: 2,          // 2 unidades exactas
     semanasPorUnidad: 8,  // 8 semanas cada unidad (16 semanas en total)
     totalSemanas: 16
@@ -34,7 +34,7 @@ const TEMAS_INICIALES_ALGORITMO = {
   3: "Arreglos paralelos",
   4: "Arreglos de Objetos",
   5: "ArrayList",
-  6: "Pilas de objetos y aplicaciones con pilas (Clase Stack)",
+  6: "Pilas de objetos y aplicaciones con pilas",
   7: "Colas: TDA cola, representación, operaciones y aplicaciones de colas",
   8: "Recursividad: Algoritmos de programación recursiva y múltiple",
   9: "Listas Simplemente Enlazadas (LSE): TDA, representación y operaciones",
