@@ -31,9 +31,9 @@ const CURSOS = [
 const TEMAS_INICIALES_ALGORITMO = {
   1: "Arreglos Unidimensionales",
   2: "Arreglos Bidimensionales",
-  3: "Arreglos paralelos)",
+  3: "Arreglos paralelos",
   4: "Arreglos de Objetos",
-  5: "Pilas: TDA pila, definición, representación y operaciones",
+  5: "ArrayList",
   6: "Pilas de objetos y aplicaciones con pilas (Clase Stack)",
   7: "Colas: TDA cola, representación, operaciones y aplicaciones de colas",
   8: "Recursividad: Algoritmos de programación recursiva y múltiple",
